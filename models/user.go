@@ -21,7 +21,7 @@ type User struct {
 // Cifra la contraseña antes de guardarla en la base de datos
 func (u *User) HashPassword() error {
 	if u.Password == "" {
-		return errors.New("password cannot be empty")
+		return errors.New("la contraseña no puede estar vacia")
 	}
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
 	if err != nil {
@@ -34,7 +34,7 @@ func (u *User) HashPassword() error {
 // Verifica si la contraseña coincide con el hash
 func (u *User) CheckPassword(password string) error {
 	if u.Password == "" {
-		return errors.New("password not set")
+		return errors.New("contraseña no establecida")
 	}
 	return bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password))
 }

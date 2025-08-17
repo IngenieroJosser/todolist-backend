@@ -31,7 +31,7 @@ func (h *AuthHandler) SignIn(w http.ResponseWriter, r *http.Request) {
 	user, err := h.Repo.FindByEmail(creds.Email)
 	if err != nil {
 		if err == repository.ErrUserNotFound {
-			http.Error(w, "Invalid credentials", http.StatusUnauthorized)
+			http.Error(w, "Credenciales invalidas", http.StatusUnauthorized)
 		} else {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
@@ -39,7 +39,7 @@ func (h *AuthHandler) SignIn(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := user.CheckPassword(creds.Password); err != nil {
-		http.Error(w, "Invalid credentials", http.StatusUnauthorized)
+		http.Error(w, "Credenciales invalidas", http.StatusUnauthorized)
 		return
 	}
 
@@ -47,7 +47,7 @@ func (h *AuthHandler) SignIn(w http.ResponseWriter, r *http.Request) {
 	userIDStr := strconv.FormatUint(uint64(user.ID), 10)
 
 	response := map[string]string{
-		"message": "Login successful",
+		"message": "Inicio de sesión exitoso",
 		"user_id": userIDStr,
 		// En producción, agregar token JWT aquí
 	}
@@ -65,7 +65,7 @@ func (h *AuthHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if user.Password == "" {
-		http.Error(w, "Password is required", http.StatusBadRequest)
+		http.Error(w, "La contraseña es requerida", http.StatusBadRequest)
 		return
 	}
 
