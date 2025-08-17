@@ -43,9 +43,10 @@ func main() {
   // Handlers
   userHandler := handlers.NewUserHandler(userRepo)
   taskHandler := handlers.NewTaskHandler(taskRepo)
+	authHandler := handlers.NewAuthHandler(userRepo)
 
   // Configura todas las rutas
-  router := routes.SetupRoutes(userHandler, taskHandler)
+  router := routes.SetupRoutes(userHandler, taskHandler, authHandler)
 
 	// Servidor
 	fmt.Println("Servidor corriendo en http://localhost:8080") 

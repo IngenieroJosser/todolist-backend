@@ -8,6 +8,7 @@ import (
 func SetupRoutes(
   userHandler *handlers.UserHandler,
   taskHandler *handlers.TaskHandler,
+  authHandler *handlers.AuthHandler,
   ) *mux.Router {
   r := mux.NewRouter()
 
@@ -24,6 +25,10 @@ func SetupRoutes(
   r.HandleFunc("/tasks/{id}", taskHandler.GetTaskById).Methods("GET")
   r.HandleFunc("/tasks/{id}", taskHandler.UpdateTask).Methods("PUT")
   r.HandleFunc("/tasks/{id}", taskHandler.DeleteTask).Methods("DELETE")
+
+  // Autenticación
+	r.HandleFunc("/sign-in", authHandler.SignIn).Methods("POST")
+	r.HandleFunc("/sign-up", authHandler.SignUp).Methods("POST")
 
   return r
 }
