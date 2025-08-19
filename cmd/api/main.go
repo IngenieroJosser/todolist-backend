@@ -51,7 +51,7 @@ func main() {
 	// Configura todas las rutas
 	router := routes.SetupRoutes(userHandler, taskHandler, authHandler)
 
-	// Wrap con el middleware CORS
+	// Wrap con el middleware CORS para permitir peticiones
 	handlerWithCORS := middlewares.CORSMiddleware(router)
 
 	// Servidor
