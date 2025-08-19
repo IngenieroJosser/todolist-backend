@@ -9,6 +9,7 @@ import (
 	"todolist-backend/models"
 	"todolist-backend/repository"
 	"todolist-backend/routes"
+	"todolist-backend/middlewares"
 
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
@@ -21,6 +22,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error cargando el archivo .env")
 	}
+
 	// Configuración de DB
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
 		os.Getenv("DB_HOST"),
@@ -33,22 +35,26 @@ func main() {
 	if err != nil {
 		log.Fatal("Error conectando a la DB: ", err)
 	}
+
 	// Migraciones
 	db.AutoMigrate(&models.User{})
 
 	// Repositories
-  userRepo := repository.NewUserRepository(db)
-  taskRepo := repository.NewTaskRepository(db)
-  
-  // Handlers
-  userHandler := handlers.NewUserHandler(userRepo)
-  taskHandler := handlers.NewTaskHandler(taskRepo)
+	userRepo := repository.NewUserRepository(db)
+	taskRepo := repository.NewTaskRepository(db)
+
+	// Handlers
+	userHandler := handlers.NewUserHandler(userRepo)
+	taskHandler := handlers.NewTaskHandler(taskRepo)
 	authHandler := handlers.NewAuthHandler(userRepo)
 
-  // Configura todas las rutas
-  router := routes.SetupRoutes(userHandler, taskHandler, authHandler)
+	// Configura todas las rutas
+	router := routes.SetupRoutes(userHandler, taskHandler, authHandler)
+
+	// Wrap con el middleware CORS
+	handlerWithCORS := middlewares.CORSMiddleware(router)
 
 	// Servidor
-	fmt.Println("Servidor corriendo en http://localhost:8080") 
-	log.Fatal(http.ListenAndServe(":8080", router))
+	fmt.Println("Servidor corriendo en http://localhost:8080")
+	log.Fatal(http.ListenAndServe(":8080", handlerWithCORS))
 }
