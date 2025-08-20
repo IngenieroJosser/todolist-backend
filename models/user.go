@@ -10,7 +10,7 @@ type User struct {
 	gorm.Model
 	Name           string `json:"name"`
 	Email          string `json:"email" gorm:"unique"`
-	Password       string `json:"password"` // Omitido en respuestas JSON
+	Password       string `json:"password"` // Omitido en respuestas JSON "-"
 	Age            int    `json:"age"`
 	CreatedTasks   []Task `gorm:"foreignKey:CreatedByID"`
 	AssignedTasks  []Task `gorm:"foreignKey:AssignedToID"`
