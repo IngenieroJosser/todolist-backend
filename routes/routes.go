@@ -9,6 +9,7 @@ func SetupRoutes(
   userHandler *handlers.UserHandler,
   taskHandler *handlers.TaskHandler,
   authHandler *handlers.AuthHandler,
+  projectHandler *handlers.ProjectHandler,
   ) *mux.Router {
   r := mux.NewRouter()
 
@@ -29,6 +30,13 @@ func SetupRoutes(
   // Autenticación
 	r.HandleFunc("/sign-in", authHandler.SignIn).Methods("POST")
 	r.HandleFunc("/sign-up", authHandler.SignUp).Methods("POST")
+
+  // Projectos
+  r.HandleFunc("/projects", projectHandler.GetAllProjects).Methods("GET")
+  r.HandleFunc("/projects", projectHandler.CreateProject).Methods("POST")
+  r.HandleFunc("/projects/{id}", projectHandler.DeleteProject).Methods("DELETE")
+  r.HandleFunc("/projects/{id}", projectHandler.GetProjectById).Methods("GET")
+  r.HandleFunc("/projects/{id}", projectHandler.UpdateProject).Methods("PUT")
 
   return r
 }

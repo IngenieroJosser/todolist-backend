@@ -42,14 +42,16 @@ func main() {
 	// Repositories
 	userRepo := repository.NewUserRepository(db)
 	taskRepo := repository.NewTaskRepository(db)
+	projectRepo := repository.NewProjectRepository(db)
 
 	// Handlers
 	userHandler := handlers.NewUserHandler(userRepo)
 	taskHandler := handlers.NewTaskHandler(taskRepo)
 	authHandler := handlers.NewAuthHandler(userRepo)
+	projectHandler := handlers.NewProjectHandler(projectRepo)
 
 	// Configura todas las rutas
-	router := routes.SetupRoutes(userHandler, taskHandler, authHandler)
+	router := routes.SetupRoutes(userHandler, taskHandler, authHandler, projectHandler)
 
 	// Wrap con el middleware CORS para permitir peticiones
 	handlerWithCORS := middlewares.CORSMiddleware(router)
